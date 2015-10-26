@@ -1,0 +1,8 @@
+--- cffi-1.3.0-orig/c/misc_win32.h
++++ cffi-1.3.0/c/misc_win32.h
+@@ -238,4 +238,3 @@
+ /************************************************************/
+ /* obscure */
+ 
+-#define ffi_prep_closure(a,b,c,d)  ffi_prep_closure_loc(a,b,c,d,a)
+
