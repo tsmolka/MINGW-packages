@@ -14,7 +14,7 @@ pkgname=(
   "${MINGW_PACKAGE_PREFIX}-python2-$_realname"
   "${MINGW_PACKAGE_PREFIX}-python3-$_realname"
 )
-pkgver=1.3.0
+pkgver=1.4.1
 pkgrel=1
 pkgdesc="Python 2 and 3 compatibility utilities (mingw-w64)"
 arch=('any')
@@ -32,7 +32,7 @@ source=(
   "01-dont-build-libffi.patch"
   "02-dont-def-ffi-prep-closure.patch"
 )
-sha256sums=('9daa53aff0b5cf64c85c10eab7ce6776880d0ee71b78cedeae196ae82b6734e9'
+sha256sums=('61fa9e32cc91744b92b3ec96f74c5910aa6c2f0a9fbba939fbad71dab558b974'
             '956224f6f828ca7c2ff35c1122e869a600db519d2c38265b695586cad7fd74bb'
             'fe181ef9118b458445f172e1c1dd70e3407865d2544aa28b77f22fbad4a3aff9')
 
