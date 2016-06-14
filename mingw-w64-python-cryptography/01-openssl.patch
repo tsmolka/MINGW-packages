@@ -1,0 +1,11 @@
+--- cryptography-1.4-orig/src/_cffi_src/build_openssl.py	2016-06-04 19:06:01.000000000 +0200
++++ cryptography-1.4/src/_cffi_src/build_openssl.py	2016-06-14 14:13:11.161169800 +0200
+@@ -18,7 +18,7 @@
+         return _osx_libraries(
+             os.environ.get("CRYPTOGRAPHY_OSX_NO_LINK_FLAGS")
+         )
+-    elif platform == "win32":
++    elif platform == "win32" and not os.environ.get('MSYSTEM'):
+         return ["libeay32", "ssleay32", "advapi32",
+                 "crypt32", "gdi32", "user32", "ws2_32"]
+     else:

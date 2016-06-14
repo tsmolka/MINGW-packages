@@ -1,0 +1,82 @@
+_realname=cryptography
+pkgbase=mingw-w64-python-${_realname}
+pkgname=(
+  "${MINGW_PACKAGE_PREFIX}-python2-$_realname"
+  "${MINGW_PACKAGE_PREFIX}-python3-$_realname"
+)
+pkgver=1.4
+pkgrel=1
+pkgdesc="Python 2 and 3 compatibility utilities (mingw-w64)"
+arch=('any')
+url="https://pypi.python.org/pypi/${_realname}/"
+license=('MIT')
+makedepends=(
+  "${MINGW_PACKAGE_PREFIX}-python2"
+  "${MINGW_PACKAGE_PREFIX}-python2-setuptools"
+  "${MINGW_PACKAGE_PREFIX}-python3"
+  "${MINGW_PACKAGE_PREFIX}-python3-setuptools"
+  "${MINGW_PACKAGE_PREFIX}-libffi"
+  "${MINGW_PACKAGE_PREFIX}-python2-cffi"
+  "${MINGW_PACKAGE_PREFIX}-python3-cffi"
+  "${MINGW_PACKAGE_PREFIX}-python2-pycparser"
+  "${MINGW_PACKAGE_PREFIX}-python3-pycparser"
+)
+source=(
+    "https://pypi.python.org/packages/a9/5b/a383b3a778609fe8177bd51307b5ebeee369b353550675353f46cb99c6f0/${_realname}-${pkgver}.tar.gz"
+    "01-openssl.patch"    
+)
+sha256sums=(
+    'bb149540ed90c4b2171bf694fe6991d6331bc149ae623c8ff419324f4222d128'
+    '5ce347caec1c98a607f38ad54020940300bd692e8fecd89cb55989ccaf5d2962'
+)
+
+prepare() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+  patch -p1 -i ../01-openssl.patch
+  
+  cd "${srcdir}"
+  rm -rf python2-build python3-build
+  cp -r "${_realname}-${pkgver}" python2-build
+  cp -r "${_realname}-${pkgver}" python3-build
+}
+
+build() {
+  for n in 2 3; do
+    cd "${srcdir}/python${n}-build"
+    "${MINGW_PREFIX}/bin/python${n}" setup.py build
+  done
+}
+
+package() {
+  local n=$1
+
+  depends=(
+    "${MINGW_PACKAGE_PREFIX}-python${n}"
+  )
+
+  cd "${srcdir}/python${n}-build"
+  MSYS2_ARG_CONV_EXCL="--prefix=;--install-scripts=;--install-platlib=" \
+  "${MINGW_PREFIX}/bin/python${n}" setup.py install \
+    --prefix="${MINGW_PREFIX}" \
+    --root="${pkgdir}" \
+    --optimize=1
+
+  install -Dm644 "${srcdir}/${_realname}-${pkgver}/LICENSE" \
+    "${pkgdir}${MINGW_PREFIX}/share/licenses/python${n}-${_realname}/LICENSE"
+}
+
+package_mingw-w64-i686-python2-cryptography() {
+  package 2
+}
+
+package_mingw-w64-i686-python3-cryptography() {
+  package 3
+}
+
+package_mingw-w64-x86_64-python2-cryptography() {
+  package 2
+}
+
+package_mingw-w64-x86_64-python3-cryptography() {
+  package 3
+}
